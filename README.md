@@ -14,7 +14,7 @@ $ make clean
 ```
 ### run Program
 ```
-$ make program data_file=<input> filter_size=<filter size> outfile_file=<output>
+$ make run data_file=<input> filter_size=<filter size> outfile_file=<output>
 ```
 
 ## Documentation

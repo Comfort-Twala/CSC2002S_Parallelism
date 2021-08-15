@@ -23,7 +23,7 @@ default: $(CLASS_FILES)
 clean:
 		$(RM) $(BINDIR)/*.class
 
-filter: $(CLASS_FILES)
+run: $(CLASS_FILES)
 		$(JAVA) -cp $(BINDIR) Program $(data_file) $(filter_size) $(output_file)
 
 
