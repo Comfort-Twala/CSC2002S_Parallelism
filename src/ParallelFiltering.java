@@ -1,4 +1,4 @@
-import java.util.Arrays;
+// import java.util.Arrays;
 import java.util.concurrent.RecursiveTask;
 
 /**
@@ -53,11 +53,7 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 
 			filterA.fork();
 			filterB.fork();
-			float[] A = filterA.join();
-			float[] B = filterB.join();
-			float[] res = Arrays.copyOf(A, A.length + B.length);
-			System.arraycopy(B, 0, res, A.length, B.length);			
-			return res;
+			return filterA.join();
 		}
 
 	}
