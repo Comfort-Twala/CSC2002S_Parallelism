@@ -12,9 +12,9 @@ DOCDIR=doc
 
 ### PART 1: PROGRAM ###
 $(BINDIR)/%.class:$(SRCDIR)/%.java
-		$(JAVAC) -d $(BINDIR)/ -cp $(BINDIR) $<
+		$(JAVAC) -d $(BINDIR)/ $(SRCDIR)/*.java
 
-CLASSES=Program.class
+CLASSES=fileHandler.class arrayHandler.class SequentialFiltering.class ParallelFiltering.class FilteringMethods.class Program.class
 
 CLASS_FILES=$(CLASSES:%.class=$(BINDIR)/%.class)
 
