@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * FilteringMethods class that will handle data loading, array handling for all the Filtering Methods
@@ -14,7 +15,8 @@ public class FilteringMethods {
 	private float[][] filteringData;
 	private SequentialFiltering sequential;
 	private ParallelFiltering parallel;
-	private fileHandler fileHandler;  
+	private fileHandler fileHandler;
+	private ForkJoinPool forkJoinPool;  
 
 	/**
 	 * Constructor to initialise instance with type of Filtering Method as the parameter
@@ -22,6 +24,7 @@ public class FilteringMethods {
 	public FilteringMethods() {
 		this.sequential = new SequentialFiltering();
 		this.parallel = new ParallelFiltering();
+		this.forkJoinPool = new ForkJoinPool();
 	}
 
 	/**
@@ -68,7 +71,7 @@ public class FilteringMethods {
 				break;
 			case PARALLEL:
 				parallel.setDataArray(getFilteringData());
-				setOutputData(parallel.compute());
+				setOutputData(forkJoinPool.invoke(parallel));
 				break;
 		}
 	}
