@@ -59,9 +59,26 @@ public class fileHandler {
 	 * @throws FileNotFoundException if file is not found
 	 * @throws IOException for IO Exceptions
 	 */
-	public void saveOutputToFile(float[] outputData) throws FileNotFoundException, IOException{
+	public void saveOutputToFile(float[] outputData, FilteringMethods.Type type) throws FileNotFoundException, IOException{
+		String folder;
+		switch (type){
+			case SEQUENTIAL:
+				folder = "sequential";
+				break;
+			case PARALLEL:
+				folder = "parallel";
+				break;
+			default:
+				folder = "";
+		} 
+
 		try {
-			outputFile = new FileOutputStream("sampleOutput/sampleOutput" + Integer.toString(outputData.length) + ".txt");
+			outputFile = new FileOutputStream("sampleOutput/" + folder + "/sampleOutput" + Integer.toString(outputData.length) + ".txt");
+			outputFile.write(Integer.toString(outputData.length).getBytes());
+			for (int i = 0; i < outputData.length; i++){
+				String line = Integer.toString(i) + " " + String.format("%.5f", outputData[i]);
+				outputFile.write(line.getBytes());
+			}
 		} finally {
 			if (outputFile != null) {
 				outputFile.close();
