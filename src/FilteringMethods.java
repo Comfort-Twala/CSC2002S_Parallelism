@@ -1,16 +1,36 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
- * Abstract FilteringMethods class that will handle data loading, array handling for all the Filtering Methods
+ * FilteringMethods class that will handle data loading, array handling for all the Filtering Methods
  * 
  * @author TWLCOM001 - Comfort Twala
  * @version 1.0
  */
-abstract public class FilteringMethods {
+public class FilteringMethods {
 
 	private float[] inputData;
 	private float[] outputData;
 	private float[][] filteringData;
+	private SequentialFiltering sequential;
+	private ParallelFiltering parallel;
+	private fileHandler fileHandler;  
+
+	/**
+	 * Constructor to initialise instance with type of Filtering Method as the parameter
+	 */
+	public FilteringMethods() {
+		this.sequential = new SequentialFiltering();
+		this.parallel = new ParallelFiltering();
+	}
+
+	/**
+	 * enum for type of Filtering Method instance is
+	 */
+	enum Type {
+		SEQUENTIAL,
+		PARALLEL
+	}
 
 	/**
 	 * Method to open file and populate inputData with data from file
@@ -19,7 +39,7 @@ abstract public class FilteringMethods {
 	 * @throws FileNotFoundException if file is not found
 	 */
 	public void loadData(String filename) throws FileNotFoundException{
-		fileHandler fileHandler = new fileHandler(filename);
+		fileHandler = new fileHandler(filename);
 		this.setInputData(fileHandler.getInputData());
 	}
 
@@ -31,8 +51,38 @@ abstract public class FilteringMethods {
 	public void process(int filter_size){
 		arrayHandler arrayHandler = new arrayHandler(this.inputData, filter_size);
 		setFilteringData(arrayHandler.neighbouringArrays());		
-		setOutputData(execute());
 	} 	
+
+	/**
+	 * Method to run the Filtering Method and set the results as output data
+	 * 
+	 * @param type Filtering Method used
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public void execute(Type type) throws FileNotFoundException, IOException{
+		switch (type) {
+			case SEQUENTIAL:
+				setOutputData(sequential.compute());
+				saveData(type);
+				break;
+			case PARALLEL:
+				setOutputData(parallel.compute());
+				saveData(type);
+				break;
+		}
+	}
+
+	/**
+	 * Method to write outputData to file 
+	 * 
+	 * @param type
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void saveData(Type type) throws FileNotFoundException, IOException {
+		fileHandler.saveOutputToFile(outputData, type);		
+	}
 	
 	/**
 	 * Get the inputData
@@ -86,12 +136,5 @@ abstract public class FilteringMethods {
 	 */
 	private void setFilteringData(float[][] filteringData) {
 		this.filteringData = filteringData;
-	}
-	
-	/**
-	 * Method to run the Filtering Method and return the results as output data
-	 * 
-	 * @return outputData
-	 */
-	public abstract float[] execute();
+	}	
 } 
