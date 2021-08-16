@@ -57,7 +57,7 @@ public class arrayHandler {
 	 * @param array to check median in
 	 * @return median value
 	 */
-	public float median(float[] array) {
+	public static float median(float[] array) {
 		float[] copyArray = Arrays.copyOf(array, array.length);
 		Arrays.sort(copyArray);
 		return copyArray[((copyArray.length + 1) / 2) - 1];

@@ -38,6 +38,7 @@ public class fileHandler {
 		while (this.fileReader.hasNextLine()){
 			String num = this.fileReader.nextLine().split(" ")[1].replace(",", ".");
 			this.inputData[i] = Float.parseFloat(num);
+			i++;
 		}
 		this.fileReader.close();
 	}
@@ -74,9 +75,9 @@ public class fileHandler {
 
 		try {
 			outputFile = new FileOutputStream("sampleOutput/" + folder + "/" + file);
-			outputFile.write(Integer.toString(outputData.length).getBytes());
+			outputFile.write((Integer.toString(outputData.length) + "\n").getBytes());
 			for (int i = 0; i < outputData.length; i++){
-				String line = Integer.toString(i) + " " + String.format("%.5f", outputData[i]);
+				String line = Integer.toString(i) + " " + String.format("%.5f", outputData[i]) + "\n";
 				outputFile.write(line.getBytes());
 			}
 		} finally {

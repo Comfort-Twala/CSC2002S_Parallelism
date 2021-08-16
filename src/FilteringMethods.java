@@ -63,9 +63,11 @@ public class FilteringMethods {
 	public void execute(Type type) throws FileNotFoundException, IOException{
 		switch (type) {
 			case SEQUENTIAL:
+				sequential.setDataArray(getFilteringData());
 				setOutputData(sequential.compute());
 				break;
 			case PARALLEL:
+				parallel.setDataArray(getFilteringData());
 				setOutputData(parallel.compute());
 				break;
 		}
@@ -123,7 +125,7 @@ public class FilteringMethods {
 	 * 
 	 * @return filteringData
 	 */
-	public float[][] getFilteringData() {
+	private float[][] getFilteringData() {
 		return filteringData;
 	}
 
