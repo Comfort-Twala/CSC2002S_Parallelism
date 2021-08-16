@@ -64,11 +64,9 @@ public class FilteringMethods {
 		switch (type) {
 			case SEQUENTIAL:
 				setOutputData(sequential.compute());
-				saveData(type);
 				break;
 			case PARALLEL:
 				setOutputData(parallel.compute());
-				saveData(type);
 				break;
 		}
 	}
@@ -80,8 +78,8 @@ public class FilteringMethods {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void saveData(Type type) throws FileNotFoundException, IOException {
-		fileHandler.saveOutputToFile(outputData, type);		
+	public void saveData(Type type, String file) throws FileNotFoundException, IOException {
+		fileHandler.saveOutputToFile(outputData, type, file);		
 	}
 	
 	/**

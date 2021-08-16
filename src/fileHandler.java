@@ -59,7 +59,7 @@ public class fileHandler {
 	 * @throws FileNotFoundException if file is not found
 	 * @throws IOException for IO Exceptions
 	 */
-	public void saveOutputToFile(float[] outputData, FilteringMethods.Type type) throws FileNotFoundException, IOException{
+	public void saveOutputToFile(float[] outputData, FilteringMethods.Type type, String file) throws FileNotFoundException, IOException{
 		String folder;
 		switch (type){
 			case SEQUENTIAL:
@@ -73,7 +73,7 @@ public class fileHandler {
 		} 
 
 		try {
-			outputFile = new FileOutputStream("sampleOutput/" + folder + "/sampleOutput" + Integer.toString(outputData.length) + ".txt");
+			outputFile = new FileOutputStream("sampleOutput/" + folder + "/" + file);
 			outputFile.write(Integer.toString(outputData.length).getBytes());
 			for (int i = 0; i < outputData.length; i++){
 				String line = Integer.toString(i) + " " + String.format("%.5f", outputData[i]);
