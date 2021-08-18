@@ -60,7 +60,7 @@ public class fileHandler {
 	 * @throws FileNotFoundException if file is not found
 	 * @throws IOException for IO Exceptions
 	 */
-	public void saveOutputToFile(float[] outputData, FilteringMethods.Type type, String file) throws FileNotFoundException, IOException{
+	public void saveOutputToFile(float[] outputData, float[] sEdges, float[] eEdges, FilteringMethods.Type type, String file) throws FileNotFoundException, IOException{
 		String folder;
 		switch (type){
 			case SEQUENTIAL:
@@ -75,10 +75,23 @@ public class fileHandler {
 
 		try {
 			outputFile = new FileOutputStream("sampleOutput/" + folder + "/" + file);
-			outputFile.write((Integer.toString(outputData.length) + "\n").getBytes());
-			for (int i = 0; i < outputData.length; i++){
-				String line = Integer.toString(i) + " " + String.format("%.5f", outputData[i]) + "\n";
+			outputFile.write((Integer.toString(inputData.length) + "\n").getBytes());
+			// Adding starting edges
+			int lineNo = 0;
+			for (int i = 0; i < sEdges.length; i++){
+				String line = Integer.toString(lineNo) + " " + String.format("%.5f", sEdges[i]) + "\n";
 				outputFile.write(line.getBytes());
+				lineNo++;
+			}
+			for (int i = 0; i < outputData.length; i++){
+				String line = Integer.toString(lineNo) + " " + String.format("%.5f", outputData[i]) + "\n";
+				outputFile.write(line.getBytes());
+				lineNo++;
+			}
+			for (int i = 0; i < eEdges.length; i++){
+				String line = Integer.toString(lineNo) + " " + String.format("%.5f", eEdges[i]) + "\n";
+				outputFile.write(line.getBytes());
+				lineNo++;
 			}
 		} finally {
 			if (outputFile != null) {

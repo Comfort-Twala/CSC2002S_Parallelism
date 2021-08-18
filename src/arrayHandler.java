@@ -27,9 +27,10 @@ public class arrayHandler {
 	 * @return neighbouringArray - Array of neighburing arrays 
 	 */
 	public float[][] neighbouringArrays() {
-		float[][] neighourArrays = new float[dataArray.length - 2][this.filter_size];
+		int size = filter_size - 1;
+		float[][] neighourArrays = new float[dataArray.length - size][this.filter_size];
 
-		for (int i = 0; i < dataArray.length-2; i++){
+		for (int i = 0; i < dataArray.length-size; i++){
 			neighourArrays[i] = subArray(this.dataArray, i, this.filter_size);				
 		}
 		return neighourArrays;
