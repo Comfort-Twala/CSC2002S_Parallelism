@@ -9,6 +9,7 @@ JAVADOC=/usr/bin/javadoc
 SRCDIR=src
 BINDIR=bin
 DOCDIR=doc
+OUTDIR=sampleOutput
 
 ### PART 1: PROGRAM ###
 $(BINDIR)/%.class:$(SRCDIR)/%.java
@@ -22,6 +23,8 @@ default: $(CLASS_FILES)
 
 clean:
 		$(RM) $(BINDIR)/*.class
+		$(RM) $(OUTDIR)/parallel/*
+		$(RM) $(OUTDIR)/sequential/*
 
 run: $(CLASS_FILES)
 		$(JAVA) -cp $(BINDIR) Program $(data_file) $(filter_size) $(output_file)
