@@ -10,8 +10,8 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class FilteringMethods {
 
-	private float[] inputData;
-	private float[] outputData;
+	private float[] inputData, outputData;
+	private float[] startEdges, endEdges;
 	private float[][] filteringData;
 	private SequentialFiltering sequential;
 	private ParallelFiltering parallel;
@@ -47,12 +47,18 @@ public class FilteringMethods {
 	}
 
 	/**
-	 * Method to use inputData, run the Filtering Method and produce the filteringData results
+	 * Method to use inputData, add the boundries and run the Filtering Method and produce the filteringData results
 	 * 
 	 * @param filter_size filtering size
 	 */
 	public void process(int filter_size){
 		arrayHandler arrayHandler = new arrayHandler(this.inputData, filter_size);
+		startEdges = new float[filter_size/2];
+		endEdges = new float[filter_size/2];
+		for (int i = 0, j = filter_size/2; i < filter_size/2; i++, j--) {
+			startEdges[i] = this.inputData[i];
+			endEdges[i] = this.inputData[this.inputData.length - j];
+		}
 		setFilteringData(arrayHandler.neighbouringArrays());		
 	} 	
 
@@ -84,7 +90,7 @@ public class FilteringMethods {
 	 * @throws IOException
 	 */
 	public void saveData(Type type, String file) throws FileNotFoundException, IOException {
-		fileHandler.saveOutputToFile(outputData, type, file);		
+		fileHandler.saveOutputToFile(outputData, startEdges, endEdges, type, file);		
 	}
 	
 	/**
@@ -139,5 +145,27 @@ public class FilteringMethods {
 	 */
 	private void setFilteringData(float[][] filteringData) {
 		this.filteringData = filteringData;
-	}	
+	}
+
+	public void setThreshold(int threshold) {
+		parallel.setThreshold(threshold);
+	}
+
+	/**
+	 * Get the start Edges
+	 * 
+	 * @return startEgdes
+	 */
+	public float[] getStartEdges() {
+		return this.startEdges;
+	}
+
+	/**
+	 * Get the end Edges
+	 * 
+	 * @return endEgdes
+	 */
+	public float[] getEndEdges() {
+		return this.endEdges;
+	}
 } 

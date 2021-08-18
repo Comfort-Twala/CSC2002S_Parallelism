@@ -19,12 +19,10 @@ public class SequentialFiltering {
 	 * @return array of medians
 	 */
 	public float[] compute() {
-		resultArray = new float[dataArray.length+2];
-		resultArray[0] = dataArray[0][0];
+		resultArray = new float[dataArray.length];
 		for (int i = 0; i < dataArray.length; i++){
-			resultArray[i+1] = arrayHandler.median(dataArray[i]);
+			resultArray[i] = arrayHandler.median(dataArray[i]);
 		}
-		resultArray[resultArray.length-1] = dataArray[dataArray.length-1][dataArray[dataArray.length-1].length-1];
 		return resultArray;
 	}
 

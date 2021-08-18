@@ -12,7 +12,7 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 	private float[][] dataArray;
 	private float[] resultArray;
 	private int start, end;
-	private final int SEQ_THRESHOLD = 500;
+	private int SEQ_THRESHOLD = 500;
 
 	/**
 	 * Constructor to create ParallelFiltering instance
@@ -38,13 +38,11 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 	 */
 	@Override
 	protected float[] compute() {
-		resultArray = new float[dataArray.length+2];
-		resultArray[0] = dataArray[0][0];
+		resultArray = new float[dataArray.length];
 		if ((end - start) < SEQ_THRESHOLD){
 			for (int i = 0; i < dataArray.length; i++){
-				resultArray[i+1] = arrayHandler.median(dataArray[i]);
+				resultArray[i] = arrayHandler.median(dataArray[i]);
 			}
-			resultArray[resultArray.length-1] = dataArray[dataArray.length-1][dataArray[dataArray.length-1].length-1];
 			return resultArray;
 		} else {
 			int half = (start + end) / 2;
@@ -69,4 +67,12 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 		this.end = dataArray.length;
 	}
 
+	/**
+	 * Set the Sequential Treshold 
+	 * 
+	 * @param threshold
+	 */
+	public void setThreshold(int threshold) {
+		this.SEQ_THRESHOLD = threshold;
+	}
 }
