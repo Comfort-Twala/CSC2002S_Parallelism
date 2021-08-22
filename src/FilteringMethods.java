@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -11,12 +12,13 @@ import java.util.concurrent.ForkJoinPool;
 public class FilteringMethods {
 
 	private float[] inputData, outputData;
+	private ArrayList<Float> parOutputData;
 	private float[] startEdges, endEdges;
 	private float[][] filteringData;
 	private SequentialFiltering sequential;
 	private ParallelFiltering parallel;
 	private fileHandler fileHandler;
-	private ForkJoinPool forkJoinPool;  
+	// private ForkJoinPool forkJoinPool;  
 
 	/**
 	 * Constructor to initialise instance with type of Filtering Method as the parameter
@@ -24,7 +26,7 @@ public class FilteringMethods {
 	public FilteringMethods() {
 		this.sequential = new SequentialFiltering();
 		this.parallel = new ParallelFiltering();
-		this.forkJoinPool = new ForkJoinPool();
+		// this.forkJoinPool = new ForkJoinPool();
 	}
 
 	/**
@@ -77,7 +79,8 @@ public class FilteringMethods {
 				break;
 			case PARALLEL:
 				parallel.setDataArray(getFilteringData());
-				setOutputData(forkJoinPool.invoke(parallel));
+				ForkJoinPool.commonPool().invoke(parallel);
+				setOutputData(parallel.getResult());
 				break;
 		}
 	}
@@ -119,7 +122,17 @@ public class FilteringMethods {
 	public float[] getOutputData() {
 		return outputData;
 	}
+
 		
+	/**
+	 * Get the outputData
+	 * 
+	 * @return outputData
+	 */
+	public ArrayList<Float> getParOutputData() {
+		return parOutputData;
+	}
+
 	/**
 	 * Set the outputData
 	 * 
@@ -127,6 +140,15 @@ public class FilteringMethods {
 	 */
 	private void setOutputData(float[] outputData) {
 		this.outputData = outputData;
+	}
+
+	/**
+	 * Set the outputData
+	 * 
+	 * @param outputData
+	 */
+	public void setOutputData(ArrayList<Float> outputData) {
+		this.parOutputData = outputData;
 	}
 	
 	/**

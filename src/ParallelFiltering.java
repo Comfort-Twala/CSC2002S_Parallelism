@@ -1,5 +1,7 @@
 // import java.util.Arrays;
-import java.util.concurrent.RecursiveTask;
+import java.util.ArrayList;
+import java.util.concurrent.RecursiveAction;
+// import java.util.concurrent.RecursiveTask;
 
 /**
  * Parallel Filtering class that uses the Java Fork/Join framework to parallelize the median filter operation using a divide-and-conquer algorithm.
@@ -8,11 +10,11 @@ import java.util.concurrent.RecursiveTask;
  * @version 1.0
  */
 
-public class ParallelFiltering extends RecursiveTask<float[]> {
+public class ParallelFiltering extends RecursiveAction{
 	private float[][] dataArray;
-	private float[] resultArray;
+	private ArrayList<Float> resultArray;
 	private int start, end;
-	private int SEQ_THRESHOLD = 500;
+	private int SEQ_THRESHOLD = 6000000;
 
 	/**
 	 * Constructor to create ParallelFiltering instance
@@ -26,10 +28,11 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 	 * @param start point of array
 	 * @param end point of array
 	 */
-	public ParallelFiltering(float[][] data, int start, int end) {
+	public ParallelFiltering(float[][] data, int start, int end, ArrayList<Float> result) {
 		this.dataArray = data;
 		this.start = start;
 		this.end = end;
+		this.resultArray = result;
 	}
 	
 
@@ -37,23 +40,19 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 	 * RecursiveTask overridden method to run parallel computing using the divide and conquer algorithm
 	 */
 	@Override
-	protected float[] compute() {
-		resultArray = new float[dataArray.length];
+	protected void compute() {
+		resultArray = new ArrayList<Float>();
 		if ((end - start) < SEQ_THRESHOLD){
 			for (int i = 0; i < dataArray.length; i++){
-				resultArray[i] = arrayHandler.median(dataArray[i]);
+				resultArray.add(arrayHandler.median(dataArray[i]));
 			}
-			return resultArray;
 		} else {
 			int half = (start + end) / 2;
-			ParallelFiltering filterA = new ParallelFiltering(dataArray, start, half);
-			ParallelFiltering filterB = new ParallelFiltering(dataArray, half, end);
-
-			filterA.fork();
-			filterB.fork();
-			return filterA.join();
+			invokeAll(
+				new ParallelFiltering(dataArray, start, half, resultArray),
+				new ParallelFiltering(dataArray, half, end, resultArray)
+			);
 		}
-
 	}
 
 	/**
@@ -74,5 +73,9 @@ public class ParallelFiltering extends RecursiveTask<float[]> {
 	 */
 	public void setThreshold(int threshold) {
 		this.SEQ_THRESHOLD = threshold;
+	}
+
+	public ArrayList<Float> getResult() {
+		return resultArray;
 	}
 }
